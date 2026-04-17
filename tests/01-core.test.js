@@ -62,18 +62,12 @@ describe('Humble extension environment variable API', () => {
 describe('Humble extension variable resolution', () => {
   it('resolves $VAR expressions in a string', () => {
     extension.setEnv({ NAME: 'HOME', VALUE: '/home/user' });
-    assert.equal(
-      extension.resolveString({ TEXT: '$HOME/path' }),
-      '/home/user/path'
-    );
+    assert.equal(extension.resolveString({ TEXT: '$HOME/path' }), '/home/user/path');
   });
 
   it('resolves ${VAR} expressions in a string', () => {
     extension.setEnv({ NAME: 'PROJECT', VALUE: 'humble' });
-    assert.equal(
-      extension.resolveString({ TEXT: '${PROJECT}/README.md' }),
-      'humble/README.md'
-    );
+    assert.equal(extension.resolveString({ TEXT: '${PROJECT}/README.md' }), 'humble/README.md');
   });
 
   it('resolves multiple variables and mixed syntax', () => {
@@ -98,7 +92,10 @@ describe('Humble extension metadata', () => {
   });
 
   it('exposes the expected block opcodes', () => {
-    const opcodes = extension.getInfo().blocks.map(b => b.opcode).filter(Boolean);
+    const opcodes = extension
+      .getInfo()
+      .blocks.map(b => b.opcode)
+      .filter(Boolean);
     assert.deepEqual(opcodes, ['setEnv', 'removeEnv', 'getEnv', 'resolveString']);
   });
 
