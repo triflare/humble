@@ -1,17 +1,16 @@
 /**
- * Unit tests for src/01-core.js (TurboWarpExtension class)
+ * Unit tests for src/01-core.js
  *
  * The Scratch global mock must be installed before the core module is imported,
  * because 01-core.js calls Scratch.extensions.register() at module load time.
  * The mock captures the registered instance so the class methods can be tested.
  */
 
-import { describe, it } from 'node:test';
+import { after, describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { installScratchMock } from './helpers/mock-scratch.js';
 
-// Install the mock and capture the registered extension instance.
-const { mock } = installScratchMock();
+const { mock, restore } = installScratchMock();
 let extension;
 mock.extensions.register = instance => {
   extension = instance;
@@ -20,61 +19,93 @@ mock.extensions.register = instance => {
 // Top-level await: load the core module so registration fires.
 await import('../src/01-core.js');
 
-describe('TurboWarpExtension — registration', () => {
+after(() => restore());
+
+describe('Humble extension registration', () => {
   it('registers an extension instance with Scratch', () => {
     assert.ok(extension, 'Scratch.extensions.register should have been called');
   });
 });
 
-describe('TurboWarpExtension — helloWorld()', () => {
-  it('returns "hello world!"', () => {
-    assert.equal(extension.helloWorld(), 'hello world!');
+describe('Humble extension environment variable API', () => {
+  it('stores and retrieves environment variable values', () => {
+    extension.setEnv({ NAME: 'HOME', VALUE: '/home/user' });
+    assert.equal(extension.getEnv({ NAME: 'HOME' }), '/home/user');
+  });
+
+  it('overwrites existing variables with new values', () => {
+    extension.setEnv({ NAME: 'PATH', VALUE: '/usr/bin' });
+    extension.setEnv({ NAME: 'PATH', VALUE: '/usr/local/bin' });
+    assert.equal(extension.getEnv({ NAME: 'PATH' }), '/usr/local/bin');
+  });
+
+  it('returns an empty string for unknown variables', () => {
+    assert.equal(extension.getEnv({ NAME: 'UNKNOWN_VAR' }), '');
+  });
+
+  it('does not store variables with an empty name', () => {
+    extension.setEnv({ NAME: '', VALUE: 'ignored' });
+    assert.equal(extension.getEnv({ NAME: '' }), '');
+  });
+
+  it('removes variables when requested', () => {
+    extension.setEnv({ NAME: 'TEMP', VALUE: '123' });
+    extension.removeEnv({ NAME: 'TEMP' });
+    assert.equal(extension.getEnv({ NAME: 'TEMP' }), '');
+  });
+
+  it('does not throw when removing a missing variable', () => {
+    assert.doesNotThrow(() => extension.removeEnv({ NAME: 'MISSING' }));
   });
 });
 
-describe('TurboWarpExtension — add()', () => {
-  it('adds two numbers', () => {
-    assert.equal(extension.add({ A: 3, B: 4 }), 7);
+describe('Humble extension variable resolution', () => {
+  it('resolves $VAR expressions in a string', () => {
+    extension.setEnv({ NAME: 'HOME', VALUE: '/home/user' });
+    assert.equal(
+      extension.resolveString({ TEXT: '$HOME/path' }),
+      '/home/user/path'
+    );
   });
 
-  it('coerces string arguments to numbers', () => {
-    assert.equal(extension.add({ A: '5', B: '2' }), 7);
+  it('resolves ${VAR} expressions in a string', () => {
+    extension.setEnv({ NAME: 'PROJECT', VALUE: 'humble' });
+    assert.equal(
+      extension.resolveString({ TEXT: '${PROJECT}/README.md' }),
+      'humble/README.md'
+    );
   });
 
-  it('adds 0 + 1 = 1', () => {
-    assert.equal(extension.add({ A: 0, B: 1 }), 1);
+  it('resolves multiple variables and mixed syntax', () => {
+    extension.setEnv({ NAME: 'HOME', VALUE: '/home/user' });
+    extension.setEnv({ NAME: 'PROJECT', VALUE: 'humble' });
+    assert.equal(
+      extension.resolveString({ TEXT: 'Path: $HOME/${PROJECT}/src' }),
+      'Path: /home/user/humble/src'
+    );
+  });
+
+  it('replaces unknown variables with an empty string', () => {
+    assert.equal(extension.resolveString({ TEXT: '$UNKNOWN ${MISSING}' }), ' ');
   });
 });
 
-describe('TurboWarpExtension — sayHello()', () => {
-  it('delegates to sayHelloImpl and returns a greeting', () => {
-    assert.equal(extension.sayHello({ NAME: 'World' }), 'Hello, World!');
-  });
-});
-
-describe('TurboWarpExtension — colorBlock()', () => {
-  it('returns the selected color string', () => {
-    assert.equal(extension.colorBlock({ COLOR: '#FF0000' }), 'Selected color: #FF0000');
-  });
-});
-
-describe('TurboWarpExtension — getInfo()', () => {
-  it('returns an object with an id and name', () => {
+describe('Humble extension metadata', () => {
+  it('returns getInfo metadata with expected id and name', () => {
     const info = extension.getInfo();
-    assert.equal(typeof info.id, 'string');
-    assert.equal(typeof info.name, 'string');
+    assert.equal(info.id, 'humble');
+    assert.equal(info.name, 'Humble');
   });
 
-  it('exposes a non-empty blocks array', () => {
+  it('exposes the expected block opcodes', () => {
+    const opcodes = extension.getInfo().blocks.map(b => b.opcode).filter(Boolean);
+    assert.deepEqual(opcodes, ['setEnv', 'removeEnv', 'getEnv', 'resolveString']);
+  });
+
+  it('declares a reporter block for resolveString', () => {
     const { blocks } = extension.getInfo();
-    assert.ok(Array.isArray(blocks) && blocks.length > 0, 'blocks should be a non-empty array');
-  });
-
-  it('declares all expected block opcodes', () => {
-    const opcodes = extension.getInfo().blocks.map(b => b.opcode);
-    assert.ok(opcodes.includes('helloWorld'), 'missing opcode: helloWorld');
-    assert.ok(opcodes.includes('add'), 'missing opcode: add');
-    assert.ok(opcodes.includes('colorBlock'), 'missing opcode: colorBlock');
-    assert.ok(opcodes.includes('sayHello'), 'missing opcode: sayHello');
+    const block = blocks.find(b => b.opcode === 'resolveString');
+    assert.ok(block, 'expected resolveString block to exist');
+    assert.equal(block.blockType, Scratch.BlockType.REPORTER);
   });
 });

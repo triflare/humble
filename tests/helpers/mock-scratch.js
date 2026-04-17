@@ -23,6 +23,14 @@ export function createScratchMock() {
       unsandboxed: false,
     },
     translate: text => text,
+    Cast: {
+      toString(value) {
+        return value === undefined || value === null ? '' : String(value);
+      },
+      toNumber(value) {
+        return Number(value);
+      },
+    },
     BlockType: {
       BOOLEAN: 'Boolean',
       COMMAND: 'command',
