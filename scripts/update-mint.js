@@ -31,7 +31,6 @@ const DEFAULT_EXCLUDED_PATHS = [
 const DEFAULT_PATH_ALIASES = {
   [DOCS_MINT_TOOLING_PATH]: 'documentation/mint-tooling',
 };
-const LOCAL_PACKAGE_NAME = '@triflare/humble';
 const MINT_TOOLING_PACKAGE_NAME = '@triflare/mint-tooling';
 const UPDATE_SCRIPT_PATH = 'scripts/update-mint.js';
 

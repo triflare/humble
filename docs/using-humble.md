@@ -14,4 +14,4 @@ To set an environment variable (or create one), follow these steps.
 
 You can resolve environment variables by wrapping a string (example: `$HOME/path/to/file.ext`) in the "resolve variables" reporter block.
 
-If an environment variable is missing or is set to nothing, its call in the text that you want to resolve will be replaced by an empty string ('').
+If an environment variable referenced by a placeholder is missing or is set to nothing, that placeholder in the text will be replaced by an empty string ('').
