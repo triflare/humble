@@ -69,10 +69,7 @@ describe('Humble extension variable resolution', () => {
 
   it('resolves ${VAR} expressions in a string', () => {
     extension.setEnv({ NAME: 'PROJECT', VALUE: 'humble' });
-    assert.equal(
-      extension.resolveString({ TEXT: '${PROJECT}/README.md' }),
-      'humble/README.md'
-    );
+    assert.equal(extension.resolveString({ TEXT: '${PROJECT}/README.md' }), 'humble/README.md');
   });
 
   it('resolves multiple variables and mixed syntax', () => {

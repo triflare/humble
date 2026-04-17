@@ -97,17 +97,20 @@ class TfHumble {
 
     // Regex to match $VAR_NAME and ${VAR_NAME}
     // Variables must start with a letter or underscore, followed by alphanumeric characters and underscores
-    return text.replace(/\$([A-Za-z_][A-Za-z0-9_]*)|\$\{([A-Za-z_][A-Za-z0-9_]*)\}/g, (match, p1, p2) => {
-      const varName = p1 || p2; // p1 is from $VAR, p2 is from ${VAR}
+    return text.replace(
+      /\$([A-Za-z_][A-Za-z0-9_]*)|\$\{([A-Za-z_][A-Za-z0-9_]*)\}/g,
+      (match, p1, p2) => {
+        const varName = p1 || p2; // p1 is from $VAR, p2 is from ${VAR}
 
-      if (Object.prototype.hasOwnProperty.call(this.envVars, varName)) {
-        return this.envVars[varName];
+        if (Object.prototype.hasOwnProperty.call(this.envVars, varName)) {
+          return this.envVars[varName];
+        }
+
+        // If the variable doesn't exist, we leave it as an empty string
+        // (which matches standard Bash behavior)
+        return '';
       }
-
-      // If the variable doesn't exist, we leave it as an empty string
-      // (which matches standard Bash behavior)
-      return '';
-    });
+    );
   }
 }
 
