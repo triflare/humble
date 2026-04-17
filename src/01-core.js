@@ -1,4 +1,4 @@
-class Humble {
+class tfHumble {
   constructor() {
     // Dictionary to store our environment variables internally
     this.envVars = {};
@@ -8,10 +8,11 @@ class Humble {
 
   getInfo() {
     return {
-      id: 'humble',
+      id: 'tfHumble',
       name: Scratch.translate('Humble'),
       color1: '#8B4513',
       color2: '#6B340D',
+      menuIconURI: mint.assets.get('icons/menu.svg'),
       blocks: [
         {
           opcode: 'setEnv',
@@ -112,4 +113,6 @@ class Humble {
   }
 }
 
-Scratch.extensions.register(new Humble());
+// Literally so simple!
+
+Scratch.extensions.register(new tfHumble());
