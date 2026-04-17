@@ -2,14 +2,9 @@
 
 ## Supported Versions
 
-| Mint version          | Supported? |
+| Humble version        | Supported? |
 | --------------------- | ---------- |
 | `1.x.x`               | &check;    |
-| Legacy/pre-versioning | &cross;    |
-
-> [!INFO]
->
-> "Legacy/pre-versioning" is qualified as any version of the Mint tooling before versioning was taken into account _(before Mint started incrementing their version in `package.json`)_.
 
 ## Reporting a Security Vulnerability
 

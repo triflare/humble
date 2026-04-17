@@ -1,5 +1,7 @@
 # Get Up and Running
 
+> Note that "Mint" or "mint-tooling" refers to Humble's development tooling.
+
 You can get your extension up in a few minutes!
 
 > [!INFO]

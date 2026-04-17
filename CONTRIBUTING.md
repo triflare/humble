@@ -1,8 +1,6 @@
 # Contributing to Mint
 
-> [!INFO]
->
-> If you're reading this and you've just forked this repository, you may want to replace all mentions of the Mint toolchain with your extension's name.
+> Note that "Mint" or "mint-tooling" refers to Humble's development tooling.
 
 ## What You'll Need
 
