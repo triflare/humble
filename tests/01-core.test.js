@@ -1,3 +1,4 @@
+/* global Scratch */
 /**
  * Unit tests for src/01-core.js
  *
@@ -65,29 +66,29 @@ describe('Humble extension variable resolution', () => {
     assert.equal(extension.resolveString({ TEXT: '$HOME/path' }), '/home/user/path');
   });
 
-  it('resolves ${VAR} expressions in a string', () => {
+  it('resolves ${' + 'VAR} expressions in a string', () => {
     extension.setEnv({ NAME: 'PROJECT', VALUE: 'humble' });
-    assert.equal(extension.resolveString({ TEXT: '${PROJECT}/README.md' }), 'humble/README.md');
+    assert.equal(extension.resolveString({ TEXT: '${' + 'PROJECT}/README.md' }), 'humble/README.md');
   });
 
   it('resolves multiple variables and mixed syntax', () => {
     extension.setEnv({ NAME: 'HOME', VALUE: '/home/user' });
     extension.setEnv({ NAME: 'PROJECT', VALUE: 'humble' });
     assert.equal(
-      extension.resolveString({ TEXT: 'Path: $HOME/${PROJECT}/src' }),
+      extension.resolveString({ TEXT: 'Path: $HOME/' + '${' + 'PROJECT}/src' }),
       'Path: /home/user/humble/src'
     );
   });
 
   it('replaces unknown variables with an empty string', () => {
-    assert.equal(extension.resolveString({ TEXT: '$UNKNOWN ${MISSING}' }), ' ');
+    assert.equal(extension.resolveString({ TEXT: '$UNKNOWN ' + '${' + 'MISSING}' }), ' ');
   });
 });
 
 describe('Humble extension metadata', () => {
   it('returns getInfo metadata with expected id and name', () => {
     const info = extension.getInfo();
-    assert.equal(info.id, 'humble');
+    assert.equal(info.id, 'tfHumble');
     assert.equal(info.name, 'Humble');
   });
 
