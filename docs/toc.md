@@ -1,5 +1,5 @@
-# Example documentation
+# Documentation Index
 
-Put your extension's documentation here. It will automatically be checked by CSpell.
+This file shows the table of contents for Humble's documentation.
 
-Don't be afraid to make more Markdown files in this directory!
+- [Using Humble](./using-humble.md)
