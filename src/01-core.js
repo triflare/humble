@@ -17,7 +17,7 @@ class tfHumble {
         {
           opcode: 'setEnv',
           blockType: Scratch.BlockType.COMMAND,
-          text: Scratch.translate('set env var [NAME] to [VALUE]'),
+          text: Scratch.translate('set environment variable named [NAME] to [VALUE]'),
           arguments: {
             NAME: {
               type: Scratch.ArgumentType.STRING,
@@ -32,7 +32,7 @@ class tfHumble {
         {
           opcode: 'removeEnv',
           blockType: Scratch.BlockType.COMMAND,
-          text: Scratch.translate('remove env var [NAME]'),
+          text: Scratch.translate('remove environment variable named [NAME]'),
           arguments: {
             NAME: {
               type: Scratch.ArgumentType.STRING,
@@ -43,7 +43,7 @@ class tfHumble {
         {
           opcode: 'getEnv',
           blockType: Scratch.BlockType.REPORTER,
-          text: Scratch.translate('get env var [NAME]'),
+          text: Scratch.translate('get environment variable named [NAME]'),
           arguments: {
             NAME: {
               type: Scratch.ArgumentType.STRING,
