@@ -31,7 +31,8 @@ const DEFAULT_EXCLUDED_PATHS = [
 const DEFAULT_PATH_ALIASES = {
   [DOCS_MINT_TOOLING_PATH]: 'documentation/mint-tooling',
 };
-const MINT_PACKAGE_NAME = '@triflare/humble';
+const LOCAL_PACKAGE_NAME = '@triflare/humble';
+const MINT_TOOLING_PACKAGE_NAME = '@triflare/mint-tooling';
 const UPDATE_SCRIPT_PATH = 'scripts/update-mint.js';
 
 export function parseUpdateArgs(argv = process.argv.slice(2)) {
@@ -104,7 +105,7 @@ function normalizeVersion(version) {
 
 export function getMintToolingVersion(packageJson) {
   if (!packageJson || typeof packageJson !== 'object') return null;
-  if (packageJson.name === MINT_PACKAGE_NAME && typeof packageJson.version === 'string') {
+  if (packageJson.name === MINT_TOOLING_PACKAGE_NAME && typeof packageJson.version === 'string') {
     return packageJson.version;
   }
 
@@ -116,7 +117,7 @@ export function getMintToolingVersion(packageJson) {
   ];
   for (const dependencyField of dependencyFields) {
     if (!dependencyField || typeof dependencyField !== 'object') continue;
-    const version = dependencyField[MINT_PACKAGE_NAME];
+    const version = dependencyField[MINT_TOOLING_PACKAGE_NAME];
     if (typeof version === 'string') return version;
   }
 
@@ -357,7 +358,7 @@ async function main() {
       const localMintVersion = getMintToolingVersion(localPackageJson);
       const versionSuffix =
         isMintVersionUpToDate(localPackageJson, upstreamPackageJson) && localMintVersion
-          ? ` (${MINT_PACKAGE_NAME} ${localMintVersion})`
+          ? ` (${MINT_TOOLING_PACKAGE_NAME} ${localMintVersion})`
           : '';
       if (dryRun) {
         console.log(`[dry-run] Mint tooling is already up-to-date${versionSuffix}. Nothing to do.`);

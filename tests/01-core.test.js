@@ -60,6 +60,7 @@ describe('Humble extension environment variable API', () => {
   });
 });
 
+/* eslint-disable no-template-curly-in-string */
 describe('Humble extension variable resolution', () => {
   it('resolves $VAR expressions in a string', () => {
     extension.setEnv({ NAME: 'HOME', VALUE: '/home/user' });
@@ -87,6 +88,7 @@ describe('Humble extension variable resolution', () => {
     assert.equal(extension.resolveString({ TEXT: '$UNKNOWN ${MISSING}' }), ' ');
   });
 });
+/* eslint-enable no-template-curly-in-string */
 
 describe('Humble extension metadata', () => {
   it('returns getInfo metadata with expected id and name', () => {
