@@ -1,4 +1,4 @@
-class tfHumble {
+class TfHumble {
   constructor() {
     // Dictionary to store our environment variables internally
     this.envVars = {};
@@ -79,9 +79,7 @@ class tfHumble {
   // Deletes the specified variable
   removeEnv(args) {
     const name = Scratch.Cast.toString(args.NAME);
-    if (Object.prototype.hasOwnProperty.call(this.envVars, name)) {
-      delete this.envVars[name];
-    }
+    delete this.envVars[name];
   }
 
   // Helper block to just grab the raw value of a single variable
@@ -98,8 +96,8 @@ class tfHumble {
     const text = Scratch.Cast.toString(args.TEXT);
 
     // Regex to match $VAR_NAME and ${VAR_NAME}
-    // Variables consist of alphanumeric characters and underscores
-    return text.replace(/\$([a-zA-Z0-9_]+)|\$\{([a-zA-Z0-9_]+)\}/g, (match, p1, p2) => {
+    // Variables must start with a letter or underscore, followed by alphanumeric characters and underscores
+    return text.replace(/\$([A-Za-z_][A-Za-z0-9_]*)|\$\{([A-Za-z_][A-Za-z0-9_]*)\}/g, (match, p1, p2) => {
       const varName = p1 || p2; // p1 is from $VAR, p2 is from ${VAR}
 
       if (Object.prototype.hasOwnProperty.call(this.envVars, varName)) {
@@ -115,4 +113,4 @@ class tfHumble {
 
 // Literally so simple!
 
-Scratch.extensions.register(new tfHumble());
+Scratch.extensions.register(new TfHumble());

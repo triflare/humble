@@ -66,10 +66,10 @@ describe('Humble extension variable resolution', () => {
     assert.equal(extension.resolveString({ TEXT: '$HOME/path' }), '/home/user/path');
   });
 
-  it('resolves ${' + 'VAR} expressions in a string', () => {
+  it('resolves ${VAR} expressions in a string', () => {
     extension.setEnv({ NAME: 'PROJECT', VALUE: 'humble' });
     assert.equal(
-      extension.resolveString({ TEXT: '${' + 'PROJECT}/README.md' }),
+      extension.resolveString({ TEXT: '${PROJECT}/README.md' }),
       'humble/README.md'
     );
   });
@@ -78,13 +78,13 @@ describe('Humble extension variable resolution', () => {
     extension.setEnv({ NAME: 'HOME', VALUE: '/home/user' });
     extension.setEnv({ NAME: 'PROJECT', VALUE: 'humble' });
     assert.equal(
-      extension.resolveString({ TEXT: 'Path: $HOME/' + '${' + 'PROJECT}/src' }),
+      extension.resolveString({ TEXT: 'Path: $HOME/${PROJECT}/src' }),
       'Path: /home/user/humble/src'
     );
   });
 
   it('replaces unknown variables with an empty string', () => {
-    assert.equal(extension.resolveString({ TEXT: '$UNKNOWN ' + '${' + 'MISSING}' }), ' ');
+    assert.equal(extension.resolveString({ TEXT: '$UNKNOWN ${MISSING}' }), ' ');
   });
 });
 
