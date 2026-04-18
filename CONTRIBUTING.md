@@ -1,8 +1,6 @@
-# Contributing to Mint
+# Contributing to Humble
 
-> [!INFO]
->
-> If you're reading this and you've just forked this repository, you may want to replace all mentions of the Mint toolchain with your extension's name.
+> Note that "Mint" or "mint-tooling" refers to Humble's development tooling.
 
 ## What You'll Need
 
@@ -13,7 +11,7 @@
 
 ## Understanding the Build Script
 
-Mint's build script is something called a "bundler", which means it concatenates _(or combines)_ a set of files into one. In Mint's case, the files it bundles are called "modules" or "ES modules". If you know about Webpack, you'll know exactly what we mean.
+Humble's build script is something called a "bundler", which means it concatenates _(or combines)_ a set of files into one. In Humble's case, the files it bundles are called "modules" or "ES modules". If you know about Webpack, you'll know exactly what we mean.
 
 The build process outputs three files:
 
@@ -39,13 +37,9 @@ If AI code is used, it should meet or exceed human standards. We have both human
 >
 > A recent U.S. case found that purely AI-generated code may not be eligible for U.S. copyright protection and can be treated as public domain. However, any portions that a human author created or that a human has substantially modified remain eligible for copyright and may be licensed by their copyright holders. This warning applies only to the purely machine-generated parts; human-authored or significantly edited contributions can be copyrighted and licensed.
 
-## Quality Over All
-
-Triflare believes in quality over quantity. We want to keep our tools opinionated, so we will keep ensuring quality to keep it that way. For example, our goal is to turn Mint into something that all TurboWarp extension developers use to code their extensions.
-
 ## Testing Your Extension Logic
 
-Mint ships a built-in unit-test scaffold powered by Node's native test runner (`node:test`). No extra frameworks or configuration files are needed.
+Mint, Humble's tooling, ships a built-in unit-test scaffold powered by Node's native test runner (`node:test`). No extra frameworks or configuration files are needed.
 
 ## Linting & Formatting Presets
 
