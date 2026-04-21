@@ -1,7 +1,7 @@
 {
   "name": "Humble",
   "id": "tfHumble",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Custom environment variable manager for TurboWarp.",
   "author": "Triflare",
   "license": "GPL-1.0-only",

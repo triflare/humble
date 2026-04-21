@@ -142,7 +142,14 @@ describe('Humble extension metadata', () => {
       .getInfo()
       .blocks.map(b => b.opcode)
       .filter(Boolean);
-    assert.deepEqual(opcodes, ['setEnv', 'removeEnv', 'getEnv', 'allEnv', 'importEnv', 'resolveString']);
+    assert.deepEqual(opcodes, [
+      'setEnv',
+      'removeEnv',
+      'getEnv',
+      'allEnv',
+      'importEnv',
+      'resolveString',
+    ]);
   });
 
   it('declares a reporter block for resolveString', () => {
