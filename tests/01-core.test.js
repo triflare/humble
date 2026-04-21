@@ -58,6 +58,48 @@ describe('Humble extension environment variable API', () => {
   it('does not throw when removing a missing variable', () => {
     assert.doesNotThrow(() => extension.removeEnv({ NAME: 'MISSING' }));
   });
+
+  it('exports all variables as JSON', () => {
+    extension.setEnv({ NAME: 'HOME', VALUE: '/home/user' });
+    extension.setEnv({ NAME: 'SHELL', VALUE: '/bin/bash' });
+    assert.equal(
+      extension.allEnv(),
+      JSON.stringify({
+        HOME: '/home/user',
+        SHELL: '/bin/bash',
+      })
+    );
+  });
+
+  it('imports variables from JSON', () => {
+    extension.importEnv({
+      ENV: JSON.stringify({
+        HOME: '/home/new-user',
+        SHELL: '/bin/zsh',
+      }),
+    });
+    assert.equal(extension.getEnv({ NAME: 'HOME' }), '/home/new-user');
+    assert.equal(extension.getEnv({ NAME: 'SHELL' }), '/bin/zsh');
+  });
+
+  it('replaces previous variables on import', () => {
+    extension.setEnv({ NAME: 'TEMP', VALUE: '123' });
+    extension.importEnv({ ENV: JSON.stringify({ HOME: '/home/user' }) });
+    assert.equal(extension.getEnv({ NAME: 'TEMP' }), '');
+    assert.equal(extension.getEnv({ NAME: 'HOME' }), '/home/user');
+  });
+
+  it('ignores invalid JSON imports', () => {
+    extension.setEnv({ NAME: 'HOME', VALUE: '/home/user' });
+    extension.importEnv({ ENV: '{not-json' });
+    assert.equal(extension.getEnv({ NAME: 'HOME' }), '/home/user');
+  });
+
+  it('ignores non-object JSON imports', () => {
+    extension.setEnv({ NAME: 'HOME', VALUE: '/home/user' });
+    extension.importEnv({ ENV: '"just-a-string"' });
+    assert.equal(extension.getEnv({ NAME: 'HOME' }), '/home/user');
+  });
 });
 
 /* eslint-disable no-template-curly-in-string */
@@ -99,7 +141,7 @@ describe('Humble extension metadata', () => {
       .getInfo()
       .blocks.map(b => b.opcode)
       .filter(Boolean);
-    assert.deepEqual(opcodes, ['setEnv', 'removeEnv', 'getEnv', 'resolveString']);
+    assert.deepEqual(opcodes, ['setEnv', 'removeEnv', 'getEnv', 'allEnv', 'importEnv', 'resolveString']);
   });
 
   it('declares a reporter block for resolveString', () => {
