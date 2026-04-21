@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@triflare/humble",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Custom environment variable manager for TurboWarp.",
   "main": "build/extension.js",
   "scripts": {

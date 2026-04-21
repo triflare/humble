@@ -51,6 +51,22 @@ class TfHumble {
             },
           },
         },
+        {
+          opcode: 'allEnv',
+          blockType: Scratch.BlockType.REPORTER,
+          text: Scratch.translate('all environment variables'),
+        },
+        {
+          opcode: 'importEnv',
+          blockType: Scratch.BlockType.COMMAND,
+          text: Scratch.translate('import environment variables from: [ENV]'),
+          arguments: {
+            ENV: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: '{"HOME":"/home/user"}',
+            },
+          },
+        },
         '---',
         {
           opcode: 'resolveString',
@@ -89,6 +105,34 @@ class TfHumble {
       return this.envVars[name];
     }
     return '';
+  }
+
+  allEnv() {
+    return JSON.stringify(this.envVars);
+  }
+
+  importEnv(args) {
+    const env = Scratch.Cast.toString(args.ENV);
+    let parsed;
+    try {
+      parsed = JSON.parse(env);
+    } catch {
+      return;
+    }
+
+    if (!parsed || Array.isArray(parsed) || typeof parsed !== 'object') {
+      return;
+    }
+
+    const importedEnv = {};
+    for (const [key, value] of Object.entries(parsed)) {
+      const name = Scratch.Cast.toString(key);
+      if (!name) {
+        continue;
+      }
+      importedEnv[name] = Scratch.Cast.toString(value);
+    }
+    this.envVars = importedEnv;
   }
 
   // Resolves any $VAR or ${VAR} occurrences inside a string
