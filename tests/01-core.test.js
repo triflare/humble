@@ -60,6 +60,7 @@ describe('Humble extension environment variable API', () => {
   });
 
   it('exports all variables as JSON', () => {
+    extension.importEnv({ ENV: '{}' });
     extension.setEnv({ NAME: 'HOME', VALUE: '/home/user' });
     extension.setEnv({ NAME: 'SHELL', VALUE: '/bin/bash' });
     assert.equal(
